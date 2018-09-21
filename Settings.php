@@ -1,8 +1,10 @@
-<?
+<?php
 
 namespace nyco\WpGtfsImport\Settings;
 
-if (!is_admin()) return;
+if (!is_admin()) {
+  return;
+}
 
 /**
  * Dependencies
@@ -23,152 +25,68 @@ const CAPABILITY = 'manage_options';
  */
 
 /** @var array The setting pages. */
-$pages = [
+$pages = array(
   [
     'page_title' => TITLE,
     'menu_title' => TITLE,
     'capability' => CAPABILITY,
     'menu_slug' => ID,
-    'extra_action' => function() {
-      echo '<hr>';
-      echo '<h2>Download Feeds</h2>';
-      echo '<form method="POST" action="' . admin_url('admin.php') . '">
-        <p>This will save the feeds in the specified path. Note, this will
-        overwrite existing feeds with the same archive name
-        (<code>google_transit.zip</code> will override
-        <code>google_transit.zip</code>).</p>
-        <input type="hidden" name="action" value="wp_gtfs_download" />
-        <p class="submit">
-          <input type="submit" value="Download Feeds" class="button button-primary"/>
-        </p>
-      </form>';
-
-      // echo '<hr>';
-      // echo '<h2>Import Feeds</h2>';
-      // echo '<p>Backup your database before importing feeds. Click "Import GTFS"
-      //   to import the fields into into their corresponding <code>
-      //   wp_gtfs_feed_[field]</code> table.</p>';
-
-      // echo '<form method="POST" action="' . admin_url('admin.php') . '">
-      //   <input type="hidden" name="action" value="wp_gtfs_import_all" />
-      //   <p class="submit">
-      //     <input type="submit" value="Import All Feeds" class="button button-primary"/>
-      //   </p>
-      // </form>';
-
-      // echo '<h2>Import Feeds Individually</h2>';
-      // Utilities\parse_directories(function($path, $name) {
-      //   echo '<form method="POST" action="' . admin_url('admin.php') . '">
-      //     <table class="form-table"><tbody><tr>
-      //       <th>' . $name . '</th>
-      //       <td>
-      //         <input type="hidden" name="action" value="wp_gtfs_import_' . $name . '" />
-      //         <input type="submit" value="Import Feed" class="button button-primary"/>
-      //       </td>
-      //     </tr></tbody>
-      //   </form>';
-      // }, null);
+    'extra_action' => function () {
+      gtfs_import_settings_template(array('id' => 'gtfs_download_feeds'));
+      gtfs_import_settings_template(array('id' => 'gtfs_import_feeds'));
     }
   ]
-];
+);
 
 /** @var array The Settings sections. */
-$sections = [
+$sections = array(
   [
     'id' => 'gtfs_feeds',
-    'title' => 'Feeds',
-    'callback' => function() {},
+    'title' => 'Step 1. Feed Settings',
+    'callback' => function () {
+    },
     'page' => ID
   ]
-];
+);
 
 /** @var array The settings fields. */
-$settings = [
+$settings = array(
   [
     'id' => 'gtfs_feed',
     'title' => 'GTFS Feeds (URL)',
-    'callback' => function ($args) {
-      echo "<input
-        type='text'
-        name='" . $args['id'] . "'
-        size=40 id='" . $args['id'] . "'
-        value='" . get_option($args['id'], '') . "'
-        placeholder='" . $args['placeholder'] . "'
-      />";
-      echo '<p class="description">Enter a comma separated list of GTFS feeds
-        to import here and click "Save Changes." For example;';
-      echo '<pre class="code">';
-      echo '<div>http://web.mta.info/developers/data/nyct/subway/google_transit.zip,</div>';
-      echo '<div>http://web.mta.info/developers/data/nyct/bus/google_transit_bronx.zip,</div>';
-      echo '<div>http://web.mta.info/developers/data/nyct/bus/google_transit_brooklyn.zip,</div>';
-      echo '<div>http://web.mta.info/developers/data/nyct/bus/google_transit_manhattan.zip,</div>';
-      echo '<div>http://web.mta.info/developers/data/nyct/bus/google_transit_queens.zip,</div>';
-      echo '<div>http://web.mta.info/developers/data/nyct/bus/google_transit_staten_island.zip</div>';
-      echo '</pre></p>';
-    },
+    'callback' => 'nyco\WpGtfsImport\Settings\gtfs_import_settings_template',
     'page' => ID,
     'section' => $sections[0]['id'],
     'args' => [
       'id' => 'gtfs_feed',
-      'placeholder' => ''
+      'placeholder' => 'URL(S)'
     ],
     'type' => 'string',
     'description' => '',
-    'sanitize_callback' => function($args) {
-      return $args;
-    },
+    'sanitize_callback' => 'nyco\WpGtfsImport\Settings\gtfs_import_sanitize_callback',
     'show_in_rest' => false,
     'default' => ''
   ],
   [
-    'id' => 'gtfs_downlod_path',
+    'id' => 'gtfs_download_path',
     'title' => 'Download Path',
-    'callback' => function ($args) {
-      echo "<input
-        type='text'
-        name='" . $args['id'] . "'
-        size=40 id='" . $args['id'] . "'
-        value='" . get_option($args['id'], '') . "'
-        placeholder='" . $args['placeholder'] . "'
-      />";
-      echo '<p class="description">Enter a path in your upload
-        directory to download feeds to. By default this will be
-        <code>gtfs-data/</code>. Include the trailing slash.</p>';
-    },
+    'callback' => 'nyco\WpGtfsImport\Settings\gtfs_import_settings_template',
     'page' => ID,
     'section' => $sections[0]['id'],
     'args' => [
-      'id' => 'gtfs_downlod_path',
+      'id' => 'gtfs_download_path',
       'placeholder' => 'gtfs-data/'
     ],
     'type' => 'integer',
     'description' => '',
-    'sanitize_callback' => function($args) {
-      return $args;
-    },
+    'sanitize_callback' => 'nyco\WpGtfsImport\Settings\gtfs_import_sanitize_callback',
     'show_in_rest' => false,
     'default' => 'gtfs-data'
   ],
   [
     'id' => 'gtfs_flatten_extracted_files',
     'title' => 'Flatten Extracted Files',
-    'callback' => function ($args) {
-      $checked = (1 == get_option($args['id'], '')) ? 'checked' : '';
-      echo '<label for="' . $args['id'] . '">
-        <input
-          id="' . $args['id'] . '"
-          type="checkbox"
-          name="' . $args['id'] . '"
-          value="1"
-          ' . $checked . '
-        /> Yes</label>';
-      echo '<p class="description">By default, feeds are downloaded and
-        extracted into their own directories containing all of their fields.
-        Ex; <code>google_transit/agency.txt</code>.
-        Checking this option will extract the fields within the feeds to a
-        flattend file structure.
-        Ex; <code>google_transit_agency.txt</code>.</p>';
-    },
+    'callback' => 'nyco\WpGtfsImport\Settings\gtfs_import_settings_template',
     'page' => ID,
     'section' => $sections[0]['id'],
     'args' => [
@@ -177,38 +95,14 @@ $settings = [
     ],
     'type' => 'integer',
     'description' => '',
-    'sanitize_callback' => function($args) {
-      return $args;
-    },
+    'sanitize_callback' => 'nyco\WpGtfsImport\Settings\gtfs_import_sanitize_callback',
     'show_in_rest' => false,
     'default' => 'gtfs-data'
   ],
   [
     'id' => 'gtfs_fields',
     'title' => 'GTFS Fields to Import',
-    'callback' => function ($args) {
-      $value = get_option($args['id'], '');
-      $options = [
-        'agency', 'stops', 'routes', 'trips', 'stop_times', 'calendar',
-        'calendar_dates', 'fare_attributes', 'fare_rules', 'shapes',
-        'frequencies', 'feed_info'
-      ];
-      foreach ($options as $option) {
-        $checked = (1 == $value[$option]) ? 'checked' : '';
-        echo '<label for="' . $args['id'] . '_' . $option . '">
-          <input
-            id="' . $args['id'] . '_' . $option . '"
-            type="checkbox"
-            name="' . $args['id'] . '[' . $option . ']"
-            value="1"
-            ' . $checked . '
-          />' . ucwords(str_replace('_', ' ', $option)) . '
-        </label><br>';
-      }
-      echo '<br>';
-      echo '<p class="description">Select the fields within the feeds you would
-        like to import into your database.</p>';
-    },
+    'callback' => 'nyco\WpGtfsImport\Settings\gtfs_import_settings_template',
     'page' => ID,
     'section' => $sections[0]['id'],
     'args' => [
@@ -217,18 +111,36 @@ $settings = [
     ],
     'type' => 'integer',
     'description' => '',
-    'sanitize_callback' => function($args) {
-      return $args;
-    },
+    'sanitize_callback' => 'nyco\WpGtfsImport\Settings\gtfs_import_sanitize_callback',
     'show_in_rest' => false,
     'default' => ''
   ]
-];
+);
 
 
 /**
- * Initialization
+ * Functions
  */
+
+/**
+ * Import templates based on argument callback parameters
+ * @param  [array] $args Arguments supplied via WP callback
+ */
+function gtfs_import_settings_template($args) {
+  $template = __DIR__ . '/views/' . $args['id'] . '.php';
+  if (file_exists($template)) {
+    require $template;
+  }
+}
+
+/**
+ * Sanitize function for WP callback
+ * @param  [array] $args Arguments supplied via WP callback
+ * @param  [array]       Arguments supplied via WP callback
+ */
+function gtfs_import_sanitize_callback($args) {
+  return $args;
+}
 
 /**
  * Triggered before any other hook when a user accesses the admin area.
@@ -237,32 +149,25 @@ $settings = [
  * @param  [array] $sections An array of sections to create.
  * @param  [array] $settings An array of settings to create.
  */
-add_action('admin_init', function() use ($sections, $settings) {
-  for ($i = 0; $i < sizeof($sections); $i++) {
+add_action('admin_init', function () use ($sections, $settings) {
+  foreach ($sections as $section) {
     add_settings_section(
-      $sections[$i]['id'],
-      $sections[$i]['title'],
-      $sections[$i]['callback'],
-      $sections[$i]['page']
+      $section['id'], $section['title'], $section['callback'], $section['page']
     );
   }
 
-  for ($x = 0; $x < sizeof($settings); $x++) {
+  foreach ($settings as $setting) {
     add_settings_field(
-      $settings[$x]['id'],
-      $settings[$x]['title'],
-      $settings[$x]['callback'],
-      $settings[$x]['page'],
-      $settings[$x]['section'],
-      $settings[$x]['args']
+      $setting['id'], $setting['title'], $setting['callback'], $setting['page'],
+      $setting['section'], $setting['args']
     );
 
-    register_setting(ID, $settings[$x]['id'], array(
-      'type' => $settings[$x]['type'],
-      'description' => $settings[$x]['description'],
-      'sanitize_callback' => $settings[$x]['sanitize_callback'],
-      'show_in_rest' => $settings[$x]['show_in_rest'],
-      'default' => $settings[$x]['default']
+    register_setting(ID, $setting['id'], array(
+      'type' => $setting['type'],
+      'description' => $setting['description'],
+      'sanitize_callback' => $setting['sanitize_callback'],
+      'show_in_rest' => $setting['show_in_rest'],
+      'default' => $setting['default']
     ));
   }
 });
@@ -273,14 +178,12 @@ add_action('admin_init', function() use ($sections, $settings) {
  * is in place. Adds the plugin menu page and the page content.
  * @param  [array] $pages An array of pages to create.
  */
-add_action('admin_menu', function() use ($pages) {
-  for ($i = 0; $i < sizeof($pages); $i++) {
+add_action('admin_menu', function () use ($pages) {
+  foreach ($pages as $page) {
     add_options_page(
-      $pages[$i]['page_title'],
-      $pages[$i]['menu_title'],
-      $pages[$i]['capability'],
-      $pages[$i]['menu_slug'],
-      function() use ($pages, $i) {
+      $page['page_title'], $page['menu_title'], $page['capability'],
+      $page['menu_slug'],
+      function () use ($page) {
         echo '<div class="wrap">';
         echo '  <h1>' . TITLE . '</h1>';
         echo '  <form method="post" action="options.php">';
@@ -291,8 +194,8 @@ add_action('admin_menu', function() use ($pages) {
 
         echo '  </form>';
 
-        if (isset($pages[$i]['extra_action'])) {
-          $pages[$i]['extra_action']();
+        if (isset($page['extra_action'])) {
+          $page['extra_action']();
         }
 
         echo '</div>';

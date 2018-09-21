@@ -1,8 +1,10 @@
-<?
+<?php
 
 namespace nyco\WpGtfsImport\Download;
 
-if (!is_admin()) return;
+if (!is_admin()) {
+  return;
+}
 
 /**
  * Dependencies
@@ -26,7 +28,7 @@ const FILE_FORMAT = '.txt';
  * The wp_gtfs_import_download form is set in the Settings.php file.
  * @param  [string] $feed_dir The directory to dump the feeds to.
  */
-add_action('admin_action_wp_gtfs_download', function() {
+add_action('admin_action_wp_gtfs_download', function () {
   $uploads = wp_upload_dir();
   $uploads = $uploads['basedir'] . '/';
   $feed_dir = Utilities\get_data_dir();
@@ -78,7 +80,7 @@ function unzip_feed_archive($archive) {
   $flatten = (1 == get_option(FLATTEN_OPTION_ID, 0));
   $res = $zip -> open($archive);
 
-  if ($res != TRUE) {
+  if ($res != true) {
     return null;
   }
 

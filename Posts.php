@@ -1,4 +1,4 @@
-<?
+<?php
 
 namespace nyco\WpGtfsImport\Posts;
 
@@ -18,7 +18,7 @@ const POST_TYPE_PREFIX = 'gtfs_';
 /**
  * Create custom post types based on the fields we'd like to import.
  */
-add_action('init', function() {
+add_action('init', function () {
   $types = array_keys(get_option(FIELDS_OPTION_ID, []));
 
   foreach ($types as $type) {
@@ -40,7 +40,8 @@ add_action('init', function() {
  * @param [string] $nicename The feed field nice name (ex. Stop Times)
  */
 function register_post($slug, $nicename) {
-  register_post_type(POST_TYPE_PREFIX . $slug,
+  register_post_type(
+    POST_TYPE_PREFIX . $slug,
     array(
       'labels' => array(
         'name' => __('GTFS ' . $nicename),
@@ -104,7 +105,9 @@ function add_fields($slug) {
     $name = $field[0];
     $label = ucwords(str_replace('_', ' ', $field[0]));
 
-    if (in_array($name, $skip)) continue;
+    if (in_array($name, $skip)) {
+      continue;
+    }
 
     acf_add_local_field(array(
       'key' => $name,

@@ -1,8 +1,10 @@
-<?
+<?php
 
 namespace nyco\WpGtfsImport\Database;
 
-if (!is_admin()) return;
+if (!is_admin()) {
+  return;
+}
 
 /**
  * Dependencies
@@ -19,7 +21,7 @@ const DATABASE_VERSION_OPTION_ID = 'gtfs_import_db_ver';
 const DATABASE_VERSION = "0.0.1";
 const FEED_TABLE = 'gtfs_feed';
 const FILE_FORMAT = '.txt';
-const SCHEMA = [
+const SCHEMA = array(
   'agency' => [
     'id mediumint(9) NOT NULL AUTO_INCREMENT',
     'agency_id VARCHAR(255)',
@@ -166,7 +168,7 @@ const SCHEMA = [
     'feed_version VARCHAR(255)',
     'PRIMARY KEY (id)'
   ]
-];
+);
 
 /**
  * Functions
@@ -174,35 +176,36 @@ const SCHEMA = [
 
 /**
  * Returns the schema for database fields
- * @param  [type] $field [description]
- * @return [type]        [description]
+ * @param  [string] $field The array key in the schema to return
+ * @return [array]         The field schema
  */
 function get_schema($field = null) {
-  if (null !== $field) return SCHEMA[$field];
+  if (null !== $field) {
+    return SCHEMA[$field];
+  }
   return SCHEMA;
 }
 
 /**
  * This is the "Import All Action"
  */
-// add_action('admin_action_wp_gtfs_import_all', function() {
-//   import_action(true);
-// });
+add_action('admin_action_wp_gtfs_import_all', function () {
+  import_action(true);
+});
 
 /**
  * This adds actions for importing the data for individual feeds based
  * on the downloaded data.
  */
-// Utilities\parse_directories(function($path, $name) {
-//   add_action('admin_action_wp_gtfs_import_' . $name, function() use ($name) {
-//     import_action($name);
-//   });
-// }, null);
+Utilities\parse_directories(function ($path, $name) {
+  add_action('admin_action_wp_gtfs_import_' . $name, function () use ($name) {
+    import_action($name);
+  });
+}, null);
 
 /**
  * [import_action description]
- * @param  [type] $name [description]
- * @return [type]       [description]
+ * @param  [string] $name The name of the feed to import
  */
 function import_action($name) {
   // Create database tables
@@ -212,7 +215,7 @@ function import_action($name) {
   }
 
   // Populate the database with data
-  Utilities\parse_directories(null, function($path, $file) use ($name) {
+  Utilities\parse_directories(null, function ($path, $file) use ($name) {
     if ($name || basename(str_replace($file, '', $path)) === $name) {
       import_data($path, $file);
     }

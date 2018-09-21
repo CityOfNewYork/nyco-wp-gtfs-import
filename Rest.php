@@ -1,4 +1,4 @@
-<?
+<?php
 
 namespace nyco\WpGtfsImport\Rest;
 
@@ -28,28 +28,30 @@ const FILE_FORMAT = '.txt';
 function register_rest_routes($dir) {
   register_rest_route('api/v1', "/$dir/stations", array(
     'methods' => 'GET',
-    'callback' => function(WP_REST_Request $request) use ($dir) {
+    'callback' => function (WP_REST_Request $request) use ($dir) {
       return request_response_stations($request, $dir);
-    })
-  );
+    }
+  ));
 
   register_rest_route('api/v1', "/$dir/(?P<file>[a-zA-Z_-]+)", array(
     'methods' => 'GET',
-    'callback' => function(WP_REST_Request $request) use ($dir) {
+    'callback' => function (WP_REST_Request $request) use ($dir) {
       return request_response_gtfs($request, $dir);
-    })
-  );
+    }
+  ));
 };
 
 /**
  * Scans the gtfs-data directory for files to turn into endpoints.
  */
-add_action('rest_api_init', function() {
+add_action('rest_api_init', function () {
   $uploads = wp_upload_dir();
   $uploads = $uploads['basedir'] . '/';
   $data_dir_full = $uploads . DATA_DIR;
 
-  if (!is_dir($data_dir_full)) return;
+  if (!is_dir($data_dir_full)) {
+    return;
+  }
 
   // For each of the directories in the data upload, create an endpoint for
   // it's each of it's file contents. Only if it is a directory.

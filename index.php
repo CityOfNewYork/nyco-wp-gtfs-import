@@ -1,7 +1,7 @@
-<?
+<?php
 
 /**
- * Plugin Name:  Nyco Wp GTFS Import
+ * Plugin Name:  NYCO WP GTFS Import
  * Description:  Import GTFS Transit Data
  * Author:       NYC Opportunity
  * Requirements: The plugin doesn't include dependencies. These should be added
