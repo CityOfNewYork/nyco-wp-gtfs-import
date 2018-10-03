@@ -12,6 +12,8 @@
 <form method="POST" action="<?= admin_url('admin.php') ?>">
   <input type="hidden" name="action" value="wp_gtfs_import_all" />
 
+  <? wp_nonce_field('admin_action_wp_gtfs_import_all', 'wp_gtfs_import_all_nonce') ?>
+
   <p class="submit">
     <input type="submit" value="Import All Feeds" class="button button-primary"/>
   </p>
@@ -30,6 +32,7 @@
       <th><?= $name ?></th>
       <td>
         <input type="hidden" name="action" value="wp_gtfs_import_<?= $name ?>" />
+        <? wp_nonce_field('admin_action_wp_gtfs_import_' . $name, 'wp_gtfs_import_' . $name . '_nonce') ?>
         <input type="submit" value="Import Feed" class="button button-primary"/>
       </td>
     </tr></tbody>

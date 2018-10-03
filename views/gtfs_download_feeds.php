@@ -11,6 +11,8 @@
 
   <input type="hidden" name="action" value="wp_gtfs_download" />
 
+  <? wp_nonce_field('admin_action_wp_gtfs_download', 'wp_gtfs_download_nonce') ?>
+
   <p class="submit">
     <input type="submit" value="Download Feeds" class="button button-primary"/>
   </p>

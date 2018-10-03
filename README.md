@@ -1,4 +1,4 @@
-# NYCO WP GTFS Import
+# NYCO WP GTFS Import (beta)
 
 This WordPress Plugin will download GTFS Static data feeds and import them into a WordPress database. Optionally, you can download the static data into a custom directory and import them using another large file importer such as [WP All Import](http://www.wpallimport.com/).
 

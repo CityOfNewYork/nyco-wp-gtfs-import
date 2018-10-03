@@ -190,6 +190,13 @@ function get_schema($field = null) {
  * This is the "Import All Action"
  */
 add_action('admin_action_wp_gtfs_import_all', function () {
+  $nonce = 'wp_gtfs_import_all_nonce';
+  $action = 'wp_gtfs_import_all';
+
+  if (wp_verify_nonce($_POST[$nonce], $action)) {
+    exit;
+  }
+
   import_action(true);
 });
 
@@ -199,6 +206,13 @@ add_action('admin_action_wp_gtfs_import_all', function () {
  */
 Utilities\parse_directories(function ($path, $name) {
   add_action('admin_action_wp_gtfs_import_' . $name, function () use ($name) {
+    $nonce = 'wp_gtfs_import_' . $name . '_nonce';
+    $action = 'wp_gtfs_import_' . $name;
+
+    if (wp_verify_nonce($_POST[$nonce], $action)) {
+      exit;
+    }
+
     import_action($name);
   });
 }, null);

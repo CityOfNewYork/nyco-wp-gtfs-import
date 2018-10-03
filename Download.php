@@ -21,6 +21,8 @@ const FEED_OPTION_ID = 'gtfs_feed';
 const FLATTEN_OPTION_ID = 'gtfs_flatten_extracted_files';
 const ARCHIVE_FORMAT = '.zip';
 const FILE_FORMAT = '.txt';
+const NONCE = 'wp_gtfs_download_nonce';
+const ACTION = 'wp_gtfs_download';
 
 /**
  * This is the action that loops through the feed urls, calls methods to
@@ -29,6 +31,10 @@ const FILE_FORMAT = '.txt';
  * @param  [string] $feed_dir The directory to dump the feeds to.
  */
 add_action('admin_action_wp_gtfs_download', function () {
+  if (wp_verify_nonce($_POST[NONCE], ACTION)) {
+    exit;
+  }
+
   $uploads = wp_upload_dir();
   $uploads = $uploads['basedir'] . '/';
   $feed_dir = Utilities\get_data_dir();

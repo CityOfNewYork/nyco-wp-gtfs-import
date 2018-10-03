@@ -30,10 +30,10 @@
   },
   "scripts": {
     "lint": [
-      "vendor/bin/phpcs --standard=phpcs.xml --extensions=php --ignore=vendor/ ."
+      "vendor/bin/phpcs --standard=phpcs.xml --ignore=vendor/ ."
     ],
     "fix": [
-      "vendor/bin/phpcbf --standard=phpcs.xml --extensions=php --ignore=vendor/ ."
+      "vendor/bin/phpcbf --standard=phpcs.xml --ignore=vendor/ ."
     ]
   }
 }
