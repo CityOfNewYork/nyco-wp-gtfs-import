@@ -14,9 +14,7 @@ This WordPress Plugin will download GTFS Static data feeds and import them into 
 
 It uses composer/installers to install it to the plugin directly using Composer. Just run:
 
-```
-composer require nyco/wp-gtfs-import
-```
+    composer require nyco/wp-gtfs-import
 
 You can also download the package and add it manually to your plugin directory.
 

@@ -1,4 +1,4 @@
-<? use nyco\WpGtfsImport\Utilities as Utilities; ?>
+<? use NYCO\GTFS\Utilities as Utilities; ?>
 
 <hr>
 

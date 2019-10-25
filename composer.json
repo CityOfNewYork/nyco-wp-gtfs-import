@@ -1,6 +1,6 @@
 {
   "name": "nyco/wp-gtfs-import",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "type": "wordpress-plugin",
   "license": "GPL-3.0+",
   "description": "Import GTFS static transit data into WordPress",

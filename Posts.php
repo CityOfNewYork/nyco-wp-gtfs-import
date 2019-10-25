@@ -1,12 +1,12 @@
 <?php
 
-namespace nyco\WpGtfsImport\Posts;
+namespace NYCO\GTFS\Posts;
 
 /**
  * Dependencies
  */
 
-use nyco\WpGtfsImport\Database as Database;
+use NYCO\GTFS\Database as Database;
 
 /**
  * Constants

@@ -8,7 +8,7 @@
  *               to the root Composer file for the site (composer require ...)
  */
 
-namespace nyco\WpGtfsImport;
+namespace NYCO\GTFS;
 
 /**
  * Dependencies

@@ -1,6 +1,6 @@
 <?php
 
-namespace nyco\WpGtfsImport\Database;
+namespace NYCO\GTFS\Database;
 
 if (!is_admin()) {
   return;
@@ -10,7 +10,7 @@ if (!is_admin()) {
  * Dependencies
  */
 
-use nyco\WpGtfsImport\Utilities as Utilities;
+use NYCO\GTFS\Utilities as Utilities;
 
 /**
  * Constants

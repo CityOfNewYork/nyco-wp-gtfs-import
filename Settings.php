@@ -1,6 +1,6 @@
 <?php
 
-namespace nyco\WpGtfsImport\Settings;
+namespace NYCO\GTFS\Settings;
 
 if (!is_admin()) {
   return;
@@ -10,7 +10,7 @@ if (!is_admin()) {
  * Dependencies
  */
 
-use nyco\WpGtfsImport\Utilities as Utilities;
+use NYCO\GTFS\Utilities as Utilities;
 
 /**
  * Constants
@@ -54,7 +54,7 @@ $settings = array(
   [
     'id' => 'gtfs_feed',
     'title' => 'GTFS Feeds (URL)',
-    'callback' => 'nyco\WpGtfsImport\Settings\gtfs_import_settings_template',
+    'callback' => 'NYCO\GTFS\Settings\gtfs_import_settings_template',
     'page' => ID,
     'section' => $sections[0]['id'],
     'args' => [
@@ -63,14 +63,14 @@ $settings = array(
     ],
     'type' => 'string',
     'description' => '',
-    'sanitize_callback' => 'nyco\WpGtfsImport\Settings\gtfs_import_sanitize_callback',
+    'sanitize_callback' => 'NYCO\GTFS\Settings\gtfs_import_sanitize_callback',
     'show_in_rest' => false,
     'default' => ''
   ],
   [
     'id' => 'gtfs_download_path',
     'title' => 'Download Path',
-    'callback' => 'nyco\WpGtfsImport\Settings\gtfs_import_settings_template',
+    'callback' => 'NYCO\GTFS\Settings\gtfs_import_settings_template',
     'page' => ID,
     'section' => $sections[0]['id'],
     'args' => [
@@ -79,14 +79,14 @@ $settings = array(
     ],
     'type' => 'integer',
     'description' => '',
-    'sanitize_callback' => 'nyco\WpGtfsImport\Settings\gtfs_import_sanitize_callback',
+    'sanitize_callback' => 'NYCO\GTFS\Settings\gtfs_import_sanitize_callback',
     'show_in_rest' => false,
     'default' => 'gtfs-data'
   ],
   [
     'id' => 'gtfs_flatten_extracted_files',
     'title' => 'Flatten Extracted Files',
-    'callback' => 'nyco\WpGtfsImport\Settings\gtfs_import_settings_template',
+    'callback' => 'NYCO\GTFS\Settings\gtfs_import_settings_template',
     'page' => ID,
     'section' => $sections[0]['id'],
     'args' => [
@@ -95,14 +95,14 @@ $settings = array(
     ],
     'type' => 'integer',
     'description' => '',
-    'sanitize_callback' => 'nyco\WpGtfsImport\Settings\gtfs_import_sanitize_callback',
+    'sanitize_callback' => 'NYCO\GTFS\Settings\gtfs_import_sanitize_callback',
     'show_in_rest' => false,
     'default' => 'gtfs-data'
   ],
   [
     'id' => 'gtfs_fields',
     'title' => 'GTFS Fields to Import',
-    'callback' => 'nyco\WpGtfsImport\Settings\gtfs_import_settings_template',
+    'callback' => 'NYCO\GTFS\Settings\gtfs_import_settings_template',
     'page' => ID,
     'section' => $sections[0]['id'],
     'args' => [
@@ -111,7 +111,7 @@ $settings = array(
     ],
     'type' => 'integer',
     'description' => '',
-    'sanitize_callback' => 'nyco\WpGtfsImport\Settings\gtfs_import_sanitize_callback',
+    'sanitize_callback' => 'NYCO\GTFS\Settings\gtfs_import_sanitize_callback',
     'show_in_rest' => false,
     'default' => ''
   ]

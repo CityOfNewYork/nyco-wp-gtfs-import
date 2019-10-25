@@ -1,6 +1,6 @@
 <?php
 
-namespace nyco\WpGtfsImport\Rest;
+namespace NYCO\GTFS\Rest;
 
 /**
  * Dependencies

@@ -1,6 +1,6 @@
 <?php
 
-namespace nyco\WpGtfsImport\Download;
+namespace NYCO\GTFS\Download;
 
 if (!is_admin()) {
   return;
@@ -11,7 +11,7 @@ if (!is_admin()) {
  */
 
 use ZipArchive;
-use nyco\WpGtfsImport\Utilities as Utilities;
+use NYCO\GTFS\Utilities as Utilities;
 
 /**
  * Constants

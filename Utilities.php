@@ -1,6 +1,6 @@
 <?php
 
-namespace nyco\WpGtfsImport\Utilities;
+namespace NYCO\GTFS\Utilities;
 
 /**
  * Constants
